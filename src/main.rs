@@ -26,7 +26,8 @@ fn run<'a>() -> anyhow::Result<()> {
 
 fn get_puzzles_map() -> std::collections::HashMap<&'static str, PuzzleSolution> {
     let puzzles = [
-        ("1.1", crate::first::first_calories_count),
+        ("1.1", crate::first::first_calories_count as PuzzleSolution),
+        ("1.2", crate::first::second_calories_count as PuzzleSolution),
     ];
     let mut puzzles_map: std::collections::HashMap<&'static str, PuzzleSolution>  = std::collections::HashMap::new();
     for (name, solution) in puzzles {
