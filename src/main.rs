@@ -1,14 +1,11 @@
-use std::{io::Write};
-
-use anyhow::Context;
-
 pub mod first;
+pub mod utils;
 
 fn main() {
     match run() {
         Ok(()) => {},
         Err(e) => {
-            eprintln!("{}", e);
+            eprintln!("{:#}", e);
             std::process::exit(1);
         },
     }
@@ -17,8 +14,7 @@ fn main() {
 type PuzzleSolution = fn() -> anyhow::Result<()>;
 
 fn run<'a>() -> anyhow::Result<()> {
-    print_puzzle_index_prompt()?;
-    let puzzle_index = read_puzzle_index()?;
+    let puzzle_index = crate::utils::prompt_user("Enter the puzzle index: ")?;
     let puzzles = get_puzzles_map();
     match puzzles.get(puzzle_index.as_str()) {
         Some(solution) => solution(),
@@ -26,18 +22,6 @@ fn run<'a>() -> anyhow::Result<()> {
             anyhow::bail!(get_unknown_puzzle_index_err_msg(puzzle_index.as_str(), puzzles))
         }
     }
-}
-
-fn print_puzzle_index_prompt() -> anyhow::Result<()> {
-    print!("Enter the puzzle index: ");
-    std::io::stdout().flush().context("failed to flush the stdout")
-}
-
-fn read_puzzle_index() -> anyhow::Result<String> {
-    let mut input = String::new();
-    let _ = std::io::stdin().read_line(&mut input).context("failed to read the puzzle input")?;
-    input.pop();
-    Ok(input)
 }
 
 fn get_puzzles_map() -> std::collections::HashMap<&'static str, PuzzleSolution> {
