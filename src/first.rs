@@ -1,9 +1,7 @@
-use std::io::BufRead;
-
 use anyhow::Context;
 
 pub fn first_calories_count() -> anyhow::Result<()> {
-    let calories = get_carried_calories(get_lines()?).context("failed to get the list of carried calories")?;
+    let calories = get_carried_calories(crate::utils::get_lines()?).context("failed to get the list of carried calories")?;
 
     println!(
         "Total calories carried by the Elf with the most calories is {}",
@@ -13,19 +11,13 @@ pub fn first_calories_count() -> anyhow::Result<()> {
 }
 
 pub fn second_calories_count() -> anyhow::Result<()> {
-    let lines = get_carried_calories(get_lines()?).context("failed to get the list of carried calories")?;
+    let lines = get_carried_calories(crate::utils::get_lines()?).context("failed to get the list of carried calories")?;
 
     println!(
         "Three maximum weights carried total to {} calories",
         get_three_maximum_calories_in_total(lines).context("failed to count the total of three maximum calories carried")?
     );
     Ok(())
-}
-
-fn get_lines() -> anyhow::Result<std::io::Lines<std::io::BufReader<std::fs::File>>> {
-    let filename = crate::utils::prompt_user("Enter the input file name: ")?;
-    let file = std::fs::File::open(filename).context("failed to open the input file")?;
-    Ok(std::io::BufReader::new(file).lines())
 }
 
 fn get_maximum_calories(calories: Vec<u32>) -> anyhow::Result<u32> {
